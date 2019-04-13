@@ -1,6 +1,6 @@
 {
   "name": "mio-pomodoro",
-  "homepage": "https://allanolive.github.io/mio-pomodoro",
+  "homepage": "https://allanolive.github.io/mio-pomodoro-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
