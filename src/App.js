@@ -8,6 +8,11 @@ import SignUp from './auth/components/SignUp'
 import SignIn from './auth/components/SignIn'
 import SignOut from './auth/components/SignOut'
 import ChangePassword from './auth/components/ChangePassword'
+import Pomodoros from './Pomodoros'
+import Pomodoro from './Pomodoro'
+import PomodoroCreate from './PomodoroCreate'
+import PomodoroEdit from './PomodoroEdit'
+import Home from './Home'
 
 import Alert from 'react-bootstrap/Alert'
 
@@ -43,17 +48,32 @@ class App extends Component {
           </Alert>
         ))}
         <main className="container">
-          <Route path='/sign-up' render={() => (
+          <Route exact path='/' render={() => (
+            <Home alert={this.alert} setUser={this.setUser} />
+          )} />
+          <Route exact path='/sign-up' render={() => (
             <SignUp alert={this.alert} setUser={this.setUser} />
           )} />
-          <Route path='/sign-in' render={() => (
+          <Route exact path='/sign-in' render={() => (
             <SignIn alert={this.alert} setUser={this.setUser} />
           )} />
-          <AuthenticatedRoute user={user} path='/sign-out' render={() => (
+          <AuthenticatedRoute user={user} exact path='/sign-out' render={() => (
             <SignOut alert={this.alert} clearUser={this.clearUser} user={user} />
           )} />
-          <AuthenticatedRoute user={user} path='/change-password' render={() => (
+          <AuthenticatedRoute exact user={user} path='/change-password' render={() => (
             <ChangePassword alert={this.alert} user={user} />
+          )} />
+          <AuthenticatedRoute exact user={user} path='/pomodoros' render={(props) => (
+            <Pomodoros alert={this.alert} user={user} {...props} />
+          )} />
+          <AuthenticatedRoute exact user={user} path='/pomodoros/:id' render={(props) => (
+            <Pomodoro alert={this.alert} user={user} {...props} />
+          )} />
+          <AuthenticatedRoute exact user={user} path='/pomodoro-create' render={(props) => (
+            <PomodoroCreate alert={this.alert} user={user} {...props} />
+          )} />
+          <AuthenticatedRoute exact user={user} path='/pomodoros/:id/edit' render={(props) => (
+            <PomodoroEdit alert={this.alert} user={user} {...props} />
           )} />
         </main>
       </React.Fragment>
