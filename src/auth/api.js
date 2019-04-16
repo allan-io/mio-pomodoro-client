@@ -101,7 +101,7 @@ export const createPomodoro = (pomodoro, token) => {
 export const editPomodoro = (pomodoro, token) => {
   return axios({
     url: `${apiUrl}/pomodoros/${pomodoro.id}`,
-    method: 'patch',
+    method: 'PATCH',
     data: { pomodoro: {
       work_time: pomodoro.workTime,
       break_time: pomodoro.breakTime
