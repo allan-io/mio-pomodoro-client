@@ -21,6 +21,10 @@ $charcoal: #bbb;
   justify-content: flex-end;
 }
 
+.active-route {
+  background-color: silver;
+}
+
 @media (max-width: 600px) {
   .main-header {
     flex-direction: column;
