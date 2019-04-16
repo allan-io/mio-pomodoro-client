@@ -29,6 +29,69 @@ $charcoal: #ccc;
   background-color: $error;
 }
 
+.individual-pomodoro {
+  background-color: green;
+  height: 150px;
+  width: 150px;
+  padding: 3px;
+  margin: 5px;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.work-time {
+  font-size: 30px;
+  text-decoration: none
+}
+
+li {
+  text-decoration: none;
+}
+
+.break-time {
+  font-size: 16px;
+}
+
+.pomodoro-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 5px solid black;
+  width: 100%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.active-pomodoro {
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  background-color: green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.individual-pomodoro-time {
+  font-size: 50px;
+}
+
+.active-pomodoro-container {
+  height: 70vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
