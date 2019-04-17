@@ -17,6 +17,10 @@ $charcoal: #ccc;
   z-index: 1;
 }
 
+.hidden {
+  display: none;
+}
+
 .flash-success {
   background-color: $success;
 }
