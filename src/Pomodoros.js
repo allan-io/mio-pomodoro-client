@@ -16,11 +16,6 @@ class Pomodoros extends Component {
     }
   }
 
-  // handlePomodoroClick = event => {
-  //   event.preventDefault()
-  //   console.log(event.currentTarget)
-  // }
-
   componentDidMount () {
     const { user } = this.props
     getPomodoros(user)
@@ -33,30 +28,23 @@ class Pomodoros extends Component {
   render () {
     return (
       <Fragment>
-        <h4>My Pomodoros:</h4>
-        <Link to="/pomodoro-create">
-          <button>New Pomodoro</button>
-        </Link>
         <ul className="pomodoro-container">
+          <Link to="/pomodoro-create">
+            <button className="new-pomodoro-btn">New Pomodoro</button>
+          </Link>
           { this.state.pomodoros.map(pomodoro => (
             <li key={pomodoro.id}>
               <Link to={`/pomodoros/${pomodoro.id}`}>
                 <div className="individual-pomodoro">
                   <div>
-                    <div className="work-time" >{pomodoro.work_time}</div>
-                    <hr
-                      style={{
-                        backgroundColor: 'red',
-                        height: 2
-                      }}
-                    />
-                    <div className="break-time">{pomodoro.break_time}</div>
+                    <div className="work-time" >{pomodoro.work_time}</div>                    <div className="break-time">{pomodoro.break_time}</div>
                   </div>
                 </div>
               </Link>
             </li>
           ))}
         </ul>
+        <p className="creted-by">Created with ❤️ by Allan Oliveira</p>
       </Fragment>
     )
   }
