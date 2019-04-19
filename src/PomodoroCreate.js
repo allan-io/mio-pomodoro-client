@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // import apiUrl from './apiConfig'
 import { Redirect } from 'react-router'
 import { createPomodoro } from './auth/api.js'
+import messages from './auth/messages'
 
 import PomodoroForm from './PomodoroForm'
 
@@ -21,13 +22,14 @@ class PomodoroCreate extends Component {
   }
 
   handleSubmit = (event) => {
+    const { alert } = this.props
     event.preventDefault()
 
     const { pomodoro } = this.state
     const token = this.props.user.token
 
     createPomodoro(pomodoro, token)
-      .then(responseData => { console.log(responseData); return responseData })
+      .finally(() => alert(messages.createPomodoroSuccess, 'success'))
       .then(response => this.setState({
         created: true,
         pomodoro: response.data.pomodoro
@@ -36,6 +38,10 @@ class PomodoroCreate extends Component {
         pomodoro: { ...pomodoro, work_time: '', break_time: '' },
         message: 'create failed, please fill out all forms and try again'
       }))
+      .catch(error => {
+        console.error(error)
+        alert(messages.createPomodoroFailure, 'danger')
+      })
   }
 
   handleChange = event => {

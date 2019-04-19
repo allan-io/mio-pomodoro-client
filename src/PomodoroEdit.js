@@ -5,6 +5,7 @@ import { Redirect } from 'react-router'
 
 import PomodoroForm from './PomodoroForm'
 import { editPomodoro } from './auth/api.js'
+import messages from './auth/messages'
 
 class PomodoroEdit extends Component {
   constructor () {
@@ -26,16 +27,13 @@ class PomodoroEdit extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-
+    const { alert } = this.props
     const { pomodoro } = this.state
     const token = this.props.user.token
 
     editPomodoro(pomodoro, token)
-      // .then(response => {
-      //   console.log(response)
-      //   return response
-      // })
       .then(() => this.setState({ updated: true }))
+      .finally(() => alert(messages.updatedPomodoroSuccess, 'success'))
       .catch(() => this.setState({
         pomodoro: { ...pomodoro, title: '', director: '', year: '' },
         message: 'update failed, please fill out all forms and try again'
