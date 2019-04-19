@@ -7,6 +7,7 @@ const authenticatedOptions = (
   <React.Fragment>
     <NavLink activeClassName="active-route" exact to="/change-password">Change Password</NavLink>
     <NavLink activeClassName="active-route" exact to="/sign-out">Sign Out</NavLink>
+    <NavLink activeClassName="active-route" exact to="/pomodoros">My Pomodoros</NavLink>
   </React.Fragment>
 )
 
@@ -19,7 +20,6 @@ const unauthenticatedOptions = (
 
 const alwaysOptions = (
   <React.Fragment>
-    <NavLink activeClassName="active-route" exact to="/">Home</NavLink>
   </React.Fragment>
 )
 

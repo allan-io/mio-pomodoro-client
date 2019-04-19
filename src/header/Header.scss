@@ -1,16 +1,35 @@
 $charcoal: #bbb;
+$yellow: #ffffcc;
 
 .main-header {
   align-items: center;
-  border-bottom: 1px solid $charcoal;
+  border-bottom: 3px solid $yellow;
+  border-top: 3px solid $yellow;
   display: flex;
-  height: 100px;
+  height: 80px;
   padding: 0 20px;
+  background-color: #595959;
 
-  a,
-  span {
+  a {
     font-size: 1.2em;
-    margin: 0 15px;
+    margin: 0 10px;
+    color: $yellow;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+
+    &:hover {
+      color: #ffff33;
+
+    }
+  }
+
+  span {
+    position: absolute;
+    left: 10px;
+    font-size: 20px;
+    color: #ff4d4d
+
   }
 }
 
