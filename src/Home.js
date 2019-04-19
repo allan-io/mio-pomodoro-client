@@ -2,8 +2,9 @@ import React, { Fragment } from 'react'
 
 const Home = () => (
   <Fragment>
-    <h2>Mio Pomodoro</h2>
-    <p>Mama Mia, it&#39;s deliciously</p>
+    <h2 className="individual-pomodoro-title">Mio Pomodoro</h2>
+    <hr/>
+    <p className="creted-by">Created with ❤️ by Allan Oliveira</p>
   </Fragment>
 )
 
