@@ -4,6 +4,7 @@ import React, { Fragment, Component } from 'react'
 import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
 import { getPomodoro, deletePomodoro } from './auth/api.js'
+import messages from './auth/messages'
 
 class Pomodoro extends Component {
   constructor () {
@@ -17,24 +18,33 @@ class Pomodoro extends Component {
       breakStart: 0,
       workStart: 0,
       workShouldHide: false,
-      breakShouldHide: true
+      breakShouldHide: true,
+      timerStarted: false,
+      fillHeight: '0%',
+      fillColor: '#2dd22d'
     }
-
-    // this.breakTimer = this.breakTimer.bind(this)
   }
+
   componentDidMount () {
     const id = this.props.match.params.id
     const user = this.props.user
     getPomodoro(user, id)
-      .then(d => { console.log(d); return d })
       .then(response => this.setState({
         minutes: response.data.pomodoro.work_time,
         breakMinutes: response.data.pomodoro.break_time,
         workStart: response.data.pomodoro.work_time,
         breakStart: response.data.pomodoro.break_time
       }))
-      .then(() => console.log(this.state.breakStart))
       .catch(console.log)
+  }
+
+  handleExit = () => {
+    clearInterval(this.workIntervalHandle)
+    clearInterval(this.breakIntervalHandle)
+    this.setState({
+      timerStarted: false,
+      fillHeight: '0%'
+    })
   }
 
   handleReset = () => {
@@ -45,19 +55,23 @@ class Pomodoro extends Component {
       breakMinutes: this.state.breakStart,
       seconds: '00',
       workShouldHide: false,
-      breakShouldHide: true
+      breakShouldHide: true,
+      timerStarted: false,
+      fillHeight: '0%'
     })
   }
 
   handleBreakTimer = () => {
     const breakMinutes = Math.floor(this.breakSecondsRemaining / 60)
     const breakSeconds = this.breakSecondsRemaining - (breakMinutes * 60)
+    const percent = this.percent
 
     this.setState({
       breakMinutes: breakMinutes,
-      breakSeconds: breakSeconds
+      breakSeconds: breakSeconds,
+      fillHeight: percent + '%',
+      percent: 100 / (this.state.workStart * 61)
     })
-    console.log(this.state.breakStart, breakSeconds)
 
     if (breakSeconds < 10) {
       this.setState({
@@ -71,30 +85,26 @@ class Pomodoro extends Component {
       clearInterval(this.breakIntervalHandle)
       this.setState({
         workShouldHide: false,
-        breakShouldHide: true
+        breakShouldHide: true,
+        fillHeight: '0%'
       })
+      setTimeout(this.playAlarmX, 10000)
       this.handleWorkStart()
     }
     this.breakSecondsRemaining--
-  }
-
-  handleBreakStart = () => {
-    this.setState({
-      workShouldHide: true,
-      breakShouldHide: false
-    })
-    this.breakIntervalHandle = setInterval(this.handleBreakTimer, 1000)
-    const time = this.state.breakStart
-    this.breakSecondsRemaining = time * 60
+    this.percent += this.state.percent
   }
 
   handleWorkTimer = () => {
     const minutes = Math.floor(this.workSecondsRemaining / 60)
     const seconds = this.workSecondsRemaining - (minutes * 60)
+    const percent = this.percent
 
     this.setState({
       minutes: minutes,
-      seconds: seconds
+      seconds: seconds,
+      fillHeight: percent + '%',
+      percent: 100 / (this.state.workStart * 61)
     })
     if (seconds < 10) {
       this.setState({
@@ -108,66 +118,112 @@ class Pomodoro extends Component {
       clearInterval(this.workIntervalHandle)
       this.setState({
         workShouldHide: true,
-        breakShouldHide: false
+        breakShouldHide: false,
+        fillHeight: '0%',
+        playAlarm: true
       })
       this.handleBreakStart()
     }
 
     this.workSecondsRemaining--
+    this.percent += this.state.percent
   }
 
   handleWorkStart = () => {
-    this.workIntervalHandle = setInterval(this.handleWorkTimer, 1000)
     const time = this.state.workStart
+    this.workIntervalHandle = setInterval(this.handleWorkTimer, 1000)
     this.workSecondsRemaining = time * 60
+    this.percent = 100 / (time * 60)
+    this.setState({
+      timerStarted: true,
+      fillColor: '#2dd22d'
+    })
   }
 
+  handleBreakStart = () => {
+    this.breakIntervalHandle = setInterval(this.handleBreakTimer, 1000)
+    const time = this.state.breakStart
+    this.breakSecondsRemaining = time * 60
+    this.percent = 100 / (time * 60)
+    this.setState({
+      workShouldHide: true,
+      breakShouldHide: false,
+      fillColor: '#ff3333'
+    })
+  }
+
+  // handleEdit =() => {
+  //
+  // }
+
   handleDelete = () => {
+    clearInterval(this.workIntervalHandle)
+    clearInterval(this.breakIntervalHandle)
     const id = this.props.match.params.id
-    const { user } = this.props
+    const { user, alert } = this.props
     deletePomodoro(user, id)
       .then(() => this.setState({ shouldRedirect: true }))
+      .finally(() => alert(messages.deletePomodoroSuccess, 'success'))
       .catch(console.log)
   }
 
   render () {
-    // if (!this.state.pomodoro) {
-    //   return <p>loading...</p>
-    // }
-
     if (this.state.shouldRedirect) {
       return <Redirect to={{
         pathname: '/pomodoros', state: { message: 'Succesfully deleted pomodoro!' }
       }} />
     }
+
     const breakMinutes = this.state.breakMinutes
     const breakSeconds = this.state.breakSeconds
     const seconds = this.state.seconds
     const minutes = this.state.minutes
-    console.log(minutes, seconds)
+    const fillHeight = this.state.fillHeight
+    const fillColor = this.state.fillColor
 
     return (
       <Fragment>
+        <h1 className="individual-pomodoro-title">Mio Pomodoro</h1>
         <div className="active-pomodoro-container">
           <div className={this.state.workShouldHide ? 'hidden' : ''}>
             <div className="active-pomodoro work-hidden">
               <h4 className="individual-pomodoro-time">{minutes}</h4>
-              <h6>{seconds}</h6>
+              <h6 className="individual-pomodoro-seconds">{seconds}</h6>
+              <span className="fill"
+                style={{
+                  height: fillHeight,
+                  background: fillColor
+                }}
+              ></span>
             </div>
           </div>
           <div className={this.state.breakShouldHide ? 'hidden' : ''}>
             <div className="active-pomodoro break-hidden">
               <h4 className="individual-pomodoro-time">{breakMinutes}</h4>
-              <h6>{breakSeconds}</h6>
+              <h6 className="individual-pomodoro-seconds">{breakSeconds}</h6>
+              <span className="fill"
+                style={{
+                  height: fillHeight,
+                  background: fillColor
+                }}
+              ></span>
             </div>
           </div>
-          <button onClick={this.handleDelete}>Delete</button>
-          <button onClick={this.handleWorkStart}>Start</button>
-          <button onClick={this.handleReset}>Reset</button>
-          <Link to={this.props.match.url + '/edit'}>
-            <button>Edit</button>
-          </Link>
+          <div className="buttons">
+            <button onClick={this.handleDelete}>Delete</button>
+            <button className={this.state.timerStarted ? 'hidden' : ''}
+              onClick={this.handleWorkStart}>Start</button>
+            <button className={this.state.timerStarted ? '' : 'hidden'}
+              onClick={this.handleReset}>Reset</button>
+            <Link to={this.props.match.url + '/edit'}>
+              <button onClick={this.handleExit}>Edit</button>
+            </Link>
+            <Link to={'/pomodoros'}>
+              <button onClick={this.handleExit}>Exit</button>
+            </Link>
+          </div>
         </div>
+        <p className="creted-by">Created with ❤️ by Allan Oliveira</p>
       </Fragment>
     )
   }
