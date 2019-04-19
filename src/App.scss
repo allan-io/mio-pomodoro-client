@@ -1,7 +1,14 @@
 $success: #c7f282;
 $warning: #f1e681;
 $error: #f08181;
-$charcoal: #ccc;
+$charcoal: #404040;
+$lightgray: #bfbfbf;
+$darkgray: #595959;
+$yellow: #ffffcc;
+
+body {
+  background-color: $lightgray;
+}
 
 .flash-success,
 .flash-warning,
@@ -34,22 +41,30 @@ $charcoal: #ccc;
 }
 
 .individual-pomodoro {
-  background-color: green;
+  background-color: $darkgray;
   height: 150px;
   width: 150px;
   padding: 3px;
   margin: 5px;
   text-decoration: none;
   color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0 auto;
+  margin-left: 10px;
   border-radius: 50%;
+  position: relative;
+  border: 1px solid $yellow;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .work-time {
   font-size: 30px;
-  text-decoration: none
+  color: $yellow;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 30px;
 }
 
 li {
@@ -58,6 +73,29 @@ li {
 
 .break-time {
   font-size: 16px;
+  color: $yellow;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.new-pomodoro-btn {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  background-color: #c7f282;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .pomodoro-container {
@@ -65,8 +103,9 @@ li {
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 5px solid black;
-  width: 100%;
+  // border: 5px solid black;
+  width: 50%;
+  height: 70vh;
 }
 
 ul {
@@ -77,23 +116,96 @@ ul {
   height: 300px;
   width: 300px;
   border-radius: 50%;
-  background-color: green;
+  margin: 0 auto;
+  text-align: center;
+  border: 4px solid $yellow;
+  position: relative;
+  z-index: 20;
+  overflow: hidden;
+  background-color: $darkgray;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+    border: 6px solid $darkgray;
+  }
+  .individual-pomodoro-time {
+    font-size: 80px;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 600;
+    color: #ffffcc;
+  }
+  .individual-pomodoro-seconds {
+    font-size: 40px;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 600;
+    color: #ffffcc;
+  }
 }
 
-.individual-pomodoro-time {
-  font-size: 50px;
+.fill {
+  content: '';
+  position: absolute;
+  background: green;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .active-pomodoro-container {
-  height: 70vh;
+  height: 50vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  button {
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: $yellow;
+    color: $yellow;
+    height: 60px;
+    width: 60px;
+    margin: 4px;
+    background: $darkgray;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  left: 25%;
+}
+
+.individual-pomodoro-title {
+  text-align: center;
+  font-size: 80px;
+  font-family: 'Yellowtail', cursive;
+  text-shadow: 1px 1px #ff3333;
+  margin-top: 40px;
+  color: $charcoal;
+}
+
+.creted-by {
+  position: absolute;
+  top: 95%;
+  left: 5%;
+  font-size: 12px;
 }
 
 .auth-form {
@@ -106,10 +218,74 @@ ul {
   h3,
   input {
     margin-bottom: 5%;
+    width: 300px;
   }
 
   button {
     align-self: flex-end;
     max-width: 200px;
+    border-radius: 8px;
+    background-color: $darkgray;
+    color: $yellow;
+
+    &:hover {
+      opacity: 0.7;
+    }
   }
+}
+
+.cancel-btn {
+  background-color: #f08181;
+  color: $yellow;
+  border-radius: 50%;
+  position: absolute;
+  top: 30%;
+  right: 20%;
+  height: 80px;
+  width: 80px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.submit-btn {
+  background-color: #f08181;
+  color: $yellow;
+  border-radius: 50%;
+  position: absolute;
+  top: 22%;
+  right: -15%;
+  height: 80px;
+  width: 80px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.form-input {
+  height: 40px;
+  background-color: $yellow;
+  padding: 20px;
+  margin: 10px;
+  position: relative;
+  top: 20%;
+}
+
+.form-label {
+  height: 40px;
+  padding: 20px;
+  margin: 10px;
+  position: relative;
+  top: 20%;
+  left: 30px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.submit-form {
+  position: absolute;
+  top: 30%;
+  height: 50vh;
 }
