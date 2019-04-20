@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import apiUrl from './apiConfig'
+// import axios from 'axios'
+// import apiUrl from './apiConfig'
 import { Redirect } from 'react-router'
 
 import PomodoroForm from './PomodoroForm'
-import { editPomodoro } from './auth/api.js'
+import { editPomodoro, getPomodoro } from './auth/api.js'
 import messages from './auth/messages'
 
 class PomodoroEdit extends Component {
@@ -20,7 +20,8 @@ class PomodoroEdit extends Component {
 
   componentDidMount () {
     const id = this.props.match.params.id
-    axios.get(`${apiUrl}/pomodoros/${id}`)
+    const user = this.props.user
+    getPomodoro(user, id)
       .then(response => this.setState({ pomodoro: response.data.pomodoro }))
       .catch(console.log)
   }
